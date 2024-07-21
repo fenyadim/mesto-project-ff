@@ -9,6 +9,11 @@ const profileAddButton = document.querySelector('.profile__add-button');
 const profileName = document.querySelector('.profile__title');
 const profileDescription = document.querySelector('.profile__description');
 
+const popupImageWrapper = document.querySelector('.popup_type_image');
+const popupEditWrapper = document.querySelector('.popup_type_edit');
+const popupNewCardWrapper = document.querySelector('.popup_type_new-card');
+const popupImage = popupImageWrapper.querySelector('.popup__image');
+
 const editFormElement = document.forms['edit-profile'];
 const nameInput = editFormElement.elements.name;
 const jobInput = editFormElement.elements.description;
@@ -20,34 +25,44 @@ const cardUrlInput = createFormElement.elements.link;
 nameInput.value = profileName.textContent;
 jobInput.value = profileDescription.textContent;
 
-initialCards.forEach(({name, link}) => placeListElement.append(createCard(name, link, deleteCard, sendLike)));
+function openImagePopup (element, link, name) {
+    element.addEventListener('click', () => {
+        openPopup(popupImageWrapper);
+        popupImage.src = link;
+        popupImage.alt = name;
+        const popupCaption = document.querySelector('.popup__caption');
+        popupCaption.textContent = name
+    });
+}
+
+initialCards.forEach(({name, link}) => placeListElement.append(createCard(name, link, deleteCard, sendLike, openImagePopup)));
 
 profileEditButton.addEventListener('click', () => {
-    openPopup('.popup_type_edit')
+    openPopup(popupEditWrapper)
 })
 
 profileAddButton.addEventListener('click', () => {
-    openPopup('.popup_type_new-card')
+    openPopup(popupNewCardWrapper)
 })
 
-function handleFormSubmit(e) {
+function editFormSubmit(e) {
     e.preventDefault();
     const name = nameInput.value;
     const job = jobInput.value;
     profileName.textContent = name;
     profileDescription.textContent = job;
-    closePopup(e);
+    closePopup(e.target.closest('.popup'));
 }
 
-editFormElement.addEventListener('submit', handleFormSubmit)
+editFormElement.addEventListener('submit', editFormSubmit)
 
-function createNewCard(e) {
+function createNewCardSubmit(e) {
     e.preventDefault();
     const cardName = cardNameInput.value;
     const link = cardUrlInput.value;
-    placeListElement.prepend(createCard(cardName, link, deleteCard, sendLike));
+    placeListElement.prepend(createCard(cardName, link, deleteCard, sendLike, openImagePopup));
     createFormElement.reset();
-    closePopup(e);
+    closePopup(e.target.closest('.popup'));
 }
 
-createFormElement.addEventListener('submit', createNewCard)
+createFormElement.addEventListener('submit', createNewCardSubmit);

@@ -6,6 +6,7 @@ export function createCard(name, link, funcDelete, funcLike, openFunc) {
 
     cardImage.src = link;
     cardImage.alt = name;
+
     cardElement.querySelector('.card__title').textContent = name
 
     cardElement.querySelector('.card__like-button').addEventListener('click', funcLike);

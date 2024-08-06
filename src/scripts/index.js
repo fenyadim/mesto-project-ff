@@ -2,6 +2,7 @@ import { initialCards } from "./cards";
 import { createCard, deleteCard, sendLike } from '../components/card';
 import { closePopup, openImagePopup, openPopup } from '../components/modal';
 import '../pages/index.css';
+import { clearValidation, enableValidation } from "./validation";
 
 const placeListElement = document.querySelector('.places__list');
 const profileEditButton = document.querySelector('.profile__edit-button');
@@ -36,6 +37,17 @@ profileAddButton.addEventListener('click', () => {
     openPopup(popupNewCardWrapper)
 })
 
+const settings = {
+    formSelector: '.popup__form',
+    inputSelector: '.popup__input',
+    submitButtonSelector: '.popup__button',
+    inactiveButtonClass: 'popup__button_disabled',
+    inputErrorClass: 'popup__input_type_error',
+    errorClass: 'popup__error_visible'
+}
+
+enableValidation(settings);
+
 function editFormSubmit(e) {
     e.preventDefault();
     const name = nameInput.value;
@@ -43,6 +55,7 @@ function editFormSubmit(e) {
     profileName.textContent = name;
     profileDescription.textContent = job;
     closePopup(popupEditWrapper);
+    clearValidation(editFormElement, settings);
 }
 
 editFormElement.addEventListener('submit', editFormSubmit)
@@ -53,6 +66,7 @@ function createNewCardSubmit(e) {
     const link = cardUrlInput.value;
     placeListElement.prepend(createCard(cardName, link, deleteCard, sendLike, openImagePopup));
     createFormElement.reset();
+    clearValidation(createFormElement, settings);
     closePopup(popupNewCardWrapper);
 }
 

@@ -65,7 +65,6 @@ export function enableValidation(classList) {
 }
 
 export function clearValidation(formElement, validationConfig) {
-    console.log('CLEAR')
     const inputList = Array.from(formElement.querySelectorAll(validationConfig.inputSelector));
 
     const buttonElement = formElement.querySelector(validationConfig.submitButtonSelector);
